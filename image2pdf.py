@@ -12,15 +12,17 @@ from PIL import Image as PIL
 from typing import List
 from random import choice
 import string
-from os import system, name
+from os import system, name, path
+
 
 # Set the default save path variable here
-DEFAULT_SAVE_PATH = "/Users/gynther/Downloads/"
+DEFAULT_SAVE_PATH = f"{path.expanduser('~')}/Downloads/"
 
 
-# Convert PIL-modules default Image-class to a more readable format 
+# Convert PIL-modules default Image-class to a more readable format
 # (To avoid using Image.Image everywhere!)
-class Image: PIL.Image
+class Image:
+    PIL.Image
 
 
 # Parse raw input string into usable file paths.
@@ -32,7 +34,7 @@ def parse_file_paths(file_path_string: str) -> List[str]:
             path = "/" + path
         # On osx when dragging files to the terminal, system already tries to escape spaces in file names.
         # Which causes python to not be able to open said files. Hence need to remove backslashes.
-        path = path.replace("\\","").strip()
+        path = path.replace("\\", "").strip()
         file_paths.append(path)
 
     return file_paths
@@ -46,9 +48,10 @@ def get_file_paths_by_user_input(default_str: str = "Enter (or drag) file paths 
     while True:
         if raw_input_string != "":
             print("Press enter again to continue, or enter more files!")
-        
+
         user_input: str = input("  -->  ")
-        if user_input == "" and raw_input_string != "": break
+        if user_input == "" and raw_input_string != "":
+            break
 
         raw_input_string += user_input
 
@@ -121,6 +124,7 @@ def main():
     file_paths: List[str] = get_file_paths_by_user_input()
     images: List[Image] = create_image_list(file_paths)
     convert_images_to_pdf(images)
+
 
 if __name__ == "__main__":
     main()
